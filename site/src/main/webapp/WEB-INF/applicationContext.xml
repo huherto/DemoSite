@@ -20,6 +20,9 @@
     
     <bean id="blConfiguration" class="org.broadleafcommerce.common.config.RuntimeEnvironmentPropertiesConfigurer" />
 
+    <context:annotation-config/>
+    <bean class="com.mycompany.config.AppConfig"/>
+
     <bean id="blMergedDataSources" class="org.springframework.beans.factory.config.MapFactoryBean">
         <property name="sourceMap">
             <map>
