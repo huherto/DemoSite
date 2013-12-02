@@ -2,7 +2,6 @@ package com.mycompany.config;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,15 +14,12 @@ import org.broadleafcommerce.cms.file.service.operation.StaticMapNamedOperationC
 import org.broadleafcommerce.common.util.BroadleafMergeResourceBundleMessageSource;
 import org.broadleafcommerce.core.search.service.SearchService;
 import org.broadleafcommerce.core.search.service.solr.SolrSearchServiceImpl;
-import org.quartz.JobDetail;
 import org.springframework.beans.factory.config.ListFactoryBean;
 import org.springframework.beans.factory.config.MapFactoryBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
-import org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean;
-import org.springframework.scheduling.quartz.SimpleTriggerBean;
 import org.xml.sax.SAXException;
 
 @Configuration
