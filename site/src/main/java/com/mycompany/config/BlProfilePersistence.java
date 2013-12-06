@@ -5,23 +5,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManagerFactory;
-import javax.transaction.Transaction;
-
 import org.broadleafcommerce.common.extensibility.cache.ehcache.MergeEhCacheManagerFactoryBean;
-import org.broadleafcommerce.common.jmx.ExplicitNameFactoryBean;
 import org.broadleafcommerce.common.jmx.MetadataMBeanInfoAssembler;
 import org.hibernate.jmx.StatisticsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jmx.export.MBeanExporter;
 import org.springframework.jmx.export.annotation.AnnotationJmxAttributeSource;
 import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Configuration
 public class BlProfilePersistence {
+	
+	@Autowired
+	BlCommonAppPersistence blcap;
 
 	/*
 	<bean id="blMergedPersistenceXmlLocations" class="org.springframework.beans.factory.config.ListFactoryBean">
@@ -141,15 +140,15 @@ public class BlProfilePersistence {
 	@Bean
 	JpaTransactionManager blTransactionManager() {
 		JpaTransactionManager bean = new JpaTransactionManager();
-//		bean.setEntityManagerFactory(entityManagerFactory());
+		bean.setEntityManagerFactory(blcap.entityManagerFactory().getObject());
 		return bean;
 	}
 	
 	
 	/*
-Here there is a suggestion...http://stackoverflow.com/questions/14068525/javaconfig-replacing-aopadvisor-and-txadvice
+There is a suggestion here...http://stackoverflow.com/questions/14068525/javaconfig-replacing-aopadvisor-and-txadvice
 
-Probably the best long would be to mark the Methods using the @Transactional annotation.
+Probably the best one would be to mark the Methods using the @Transactional annotation.
 
 <tx:advice id="blTxAdvice" transaction-manager="blTransactionManager">
     <tx:attributes>
