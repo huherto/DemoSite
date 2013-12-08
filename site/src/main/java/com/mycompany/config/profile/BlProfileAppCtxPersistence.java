@@ -1,4 +1,4 @@
-package com.mycompany.config;
+package com.mycompany.config.profile;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,11 +16,13 @@ import org.springframework.jmx.export.annotation.AnnotationJmxAttributeSource;
 import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 
+import com.mycompany.config.common.BlCommonAppCtxPersistence;
+
 @Configuration
-public class BlProfilePersistence {
+public class BlProfileAppCtxPersistence {
 	
 	@Autowired
-	BlCommonAppPersistence blcap;
+	BlCommonAppCtxPersistence blcap;
 
 	/*
 	<bean id="blMergedPersistenceXmlLocations" class="org.springframework.beans.factory.config.ListFactoryBean">

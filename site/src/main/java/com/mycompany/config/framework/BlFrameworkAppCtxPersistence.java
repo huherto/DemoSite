@@ -1,4 +1,4 @@
-package com.mycompany.config;
+package com.mycompany.config.framework;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,11 +9,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
+import com.mycompany.config.common.BlCommonAppCtxPersistence;
+
 @Configuration
-public class BlFrameworkAppPersistence {
+public class BlFrameworkAppCtxPersistence {
 	
 	@Autowired
-	BlCommonAppPersistence blcap;
+	BlCommonAppCtxPersistence blcap;
 	
 	/*
     <bean id="blMergedEntityContexts" class="org.springframework.beans.factory.config.ListFactoryBean">

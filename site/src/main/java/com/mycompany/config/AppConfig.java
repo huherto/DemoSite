@@ -136,8 +136,7 @@ public class AppConfig {
     <!-- majority of cases. -->
     <bean id="solrEmbedded" class="java.lang.String">
         <constructor-arg value="solrhome"/>
-    </bean>
-    */
+    </bean> */
 	@Bean
 	public String solrEmbedded() {
 		return "solrhome";
@@ -149,8 +148,7 @@ public class AppConfig {
 		return new SolrSearchServiceImpl("${solr.source}", "${solr.source.reindex}");
 	}
 	
-	/*
-    <bean id="blStaticMapNamedOperationComponent" class="org.broadleafcommerce.cms.file.service.operation.StaticMapNamedOperationComponent">
+	/* <bean id="blStaticMapNamedOperationComponent" class="org.broadleafcommerce.cms.file.service.operation.StaticMapNamedOperationComponent">
     <property name="namedOperations">
         <map>
             <entry key="browse">
@@ -173,9 +171,7 @@ public class AppConfig {
             </entry>  
         </map>
     </property>
-	</bean>    
-*/
-
+	</bean> */
 	@Bean
 	StaticMapNamedOperationComponent blStaticMapNamedOperationComponent() {
 		

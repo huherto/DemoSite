@@ -1,4 +1,7 @@
-package com.mycompany.config;
+package com.mycompany.config.common;
+
+import java.util.Arrays;
+import java.util.List;
 
 import org.broadleafcommerce.common.extensibility.jpa.JPAPropertiesPersistenceUnitPostProcessor;
 import org.broadleafcommerce.common.extensibility.jpa.MergePersistenceUnitManager;
@@ -11,16 +14,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-public class BlCommonAppPersistence {
+public class BlCommonAppCtxPersistence {
 	/*
     <tx:annotation-driven/>
     */
 
-	/*
-    <bean id="blJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
-    */
+	/* <bean id="blJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/> */
 	@Bean
-	HibernateJpaVendorAdapter blJpaVendorAdapter() {
+	public HibernateJpaVendorAdapter blJpaVendorAdapter() {
 		return new HibernateJpaVendorAdapter();
 	}
 	
@@ -30,7 +31,7 @@ public class BlCommonAppPersistence {
         <property name="persistenceUnitName" value="blPU"/>
     </bean>*/
 	@Bean
-	LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
 		bean.setJpaVendorAdapter(blJpaVendorAdapter());
 		bean.setPersistenceUnitManager(blPersistenceUnitManager());
@@ -38,24 +39,32 @@ public class BlCommonAppPersistence {
 		return bean;
 	}
 	
-	/*
-    <bean id="blMergedCacheConfigLocations" class="org.springframework.beans.factory.config.ListFactoryBean">
+	/*<bean id="blMergedCacheConfigLocations" class="org.springframework.beans.factory.config.ListFactoryBean">
         <property name="sourceList">
             <list>
                 <value>classpath:bl-common-ehcache.xml</value>
             </list>
         </property>
-    </bean>
-
-    <bean id="blMergedPersistenceXmlLocations" class="org.springframework.beans.factory.config.ListFactoryBean">
+    </bean> */
+	@Bean
+	public List<String> blMergedCacheConfigLocations() {
+		return Arrays.asList("classpath:bl-common-ehcache.xml");
+	}
+	
+    /* <bean id="blMergedPersistenceXmlLocations" class="org.springframework.beans.factory.config.ListFactoryBean">
         <property name="sourceList">
             <list>
                 <value>classpath*:/META-INF/persistence-common.xml</value>
             </list>
         </property>
-    </bean>
+    </bean> */
+	@Bean
+	public List<String> blMergedPersistenceXmlLocations() {
+		return Arrays.asList("classpath*:/META-INF/persistence-common.xml");
+	}
+	
 
-    <bean id="blMergedEntityContexts" class="org.springframework.beans.factory.config.ListFactoryBean">
+    /*<bean id="blMergedEntityContexts" class="org.springframework.beans.factory.config.ListFactoryBean">
         <property name="sourceList">
             <list>
                 <value>classpath:bl-common-applicationContext-entity.xml</value>
@@ -63,7 +72,11 @@ public class BlCommonAppPersistence {
         </property>
     </bean>
     */
-	
+	@Bean
+	public List<String> blMergedEntityContexts() {
+		return Arrays.asList("classpath:bl-common-applicationContext-entity.xml");
+	}
+		
     /*<bean id="blPersistenceUnitManager" class="org.broadleafcommerce.common.extensibility.jpa.MergePersistenceUnitManager">
         <property name="persistenceUnitPostProcessors">
             <list>
@@ -72,7 +85,7 @@ public class BlCommonAppPersistence {
         </property>
     </bean>*/
 	@Bean
-	MergePersistenceUnitManager blPersistenceUnitManager() {
+	public MergePersistenceUnitManager blPersistenceUnitManager() {
 		MergePersistenceUnitManager bean = new MergePersistenceUnitManager();
 		bean.setPersistenceUnitPostProcessors(new JPAPropertiesPersistenceUnitPostProcessor());
 		return bean;
