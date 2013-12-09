@@ -17,10 +17,13 @@ import org.broadleafcommerce.common.web.BroadleafSiteResolver;
 import org.broadleafcommerce.common.web.BroadleafThemeResolver;
 import org.broadleafcommerce.common.web.NullBroadleafSiteResolver;
 import org.broadleafcommerce.common.web.NullBroadleafThemeResolver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.ui.velocity.VelocityEngineFactoryBean;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
@@ -33,8 +36,11 @@ public class BlCommonAppCtx {
     <context:component-scan base-package="org.broadleafcommerce.common"/>
     */
 
+	@Autowired
+	ApplicationContext appCtx;
+
     /* <bean id="blConfiguration" class="org.broadleafcommerce.common.config.RuntimeEnvironmentPropertiesConfigurer" /> */
-	@Bean 
+	@Bean
 	public RuntimeEnvironmentPropertiesConfigurer blConfiguration() {
 		return new RuntimeEnvironmentPropertiesConfigurer();
 	}
@@ -44,7 +50,7 @@ public class BlCommonAppCtx {
 	public RuntimeEnvironmentPropertiesManager blConfigurationManager() {
 		return new RuntimeEnvironmentPropertiesManager();
 	}
-	
+
     /*<bean id="blMessageCreator" class="org.broadleafcommerce.common.email.service.message.NullMessageCreator">
         <constructor-arg ref="blMailSender"/>
     </bean> */
@@ -93,14 +99,14 @@ public class BlCommonAppCtx {
     	bean.setHost("localhost");
     	bean.setPort(25);
     	bean.setProtocol("smtp");
-    	
+
     	Properties javaMailProperties = new Properties();
     	javaMailProperties.setProperty("mail.smtp.starttls.enable", "true");
     	javaMailProperties.setProperty("mail.smtp.timeout", "25000");
     	bean.setJavaMailProperties(javaMailProperties);
     	return bean;
     }
-    
+
     /*<!-- This mail sender will log the html content generated for the email to the console  -->
     <!-- To enable logging set log level in Log4j to INFO  -->
     <bean id="blLoggingMailSender" class="org.broadleafcommerce.common.email.service.LoggingMailSender" />*/
@@ -137,36 +143,36 @@ public class BlCommonAppCtx {
     	bean.setVelocityProperties(velocityProperties);
     	return bean;
     }
-    
+
     /*<bean id="blEmailInfo" class="org.broadleafcommerce.common.email.service.info.EmailInfo" />*/
     @Bean
     public EmailInfo blEmailInfo() {
     	return new EmailInfo();
     }
-    
+
     /*<bean id="blNullEmailInfo" class="org.broadleafcommerce.common.email.service.info.NullEmailInfo" />*/
     @Bean
     public EmailInfo blNullEmailInfo() throws IOException {
     	return new NullEmailInfo();
     }
-    
+
     /*<bean id="blWebCommonClasspathTemplateResolver" class="org.thymeleaf.templateresolver.ClassLoaderTemplateResolver">
         <property name="prefix" value="common_templates/" />
         <property name="suffix" value=".html" />
-        <property name="templateMode" value="HTML5" />        
+        <property name="templateMode" value="HTML5" />
         <property name="characterEncoding" value="UTF-8" />
         <property name="cacheable" value="${cache.page.templates}"/>
         <property name="cacheTTLMs" value="${cache.page.templates.ttl}" />
-        <property name="order" value="500"/> 
-    </bean> */ 
-        
+        <property name="order" value="500"/>
+    </bean> */
+
     @Value("${cache.page.templates}")
     boolean cacheable;
-    
+
     @Value("${cache.page.templates.ttl}")
     Long cacheTTLMs;
-    
-    @Bean  
+
+    @Bean
     public ClassLoaderTemplateResolver blWebCommonClasspathTemplateResolver() {
     	ClassLoaderTemplateResolver bean = new ClassLoaderTemplateResolver();
     	bean.setPrefix("common_templates");
@@ -176,22 +182,22 @@ public class BlCommonAppCtx {
     	bean.setCacheable(cacheable);
     	bean.setCacheTTLMs(cacheTTLMs);
     	bean.setOrder(500);
-    	
+
     	return bean;
     }
-    
+
     /*<bean id="blSiteResolver" class="org.broadleafcommerce.common.web.NullBroadleafSiteResolver" /> */
     @Bean
     public BroadleafSiteResolver blSiteResolver() {
     	return new NullBroadleafSiteResolver();
     }
-    
+
     /*<bean id="blThemeResolver" class="org.broadleafcommerce.common.web.NullBroadleafThemeResolver" /> */
     @Bean
     public BroadleafThemeResolver blThemeResolver() {
     	return new NullBroadleafThemeResolver();
     }
-    
+
     /*<!--  Message creator for velocity templates.  Now should be defined in client properties file. -->
     <!-- bean id="blMessageCreator" class="org.broadleafcommerce.common.email.service.message.VelocityMessageCreator">
         <constructor-arg ref="blVelocityEngine"/>
@@ -226,7 +232,7 @@ public class BlCommonAppCtx {
             </map>
         </constructor-arg>
     </bean  --> */
-    
+
     /* <bean id="blJsLocations" class="org.springframework.beans.factory.config.ListFactoryBean" >
         <property name="sourceList">
             <list>
@@ -236,8 +242,10 @@ public class BlCommonAppCtx {
         </property>
     </bean> */
     @Bean
-    public List<String> blJsLocations() {
-    	return Arrays.asList("classpath:/common_js/", "classpath:/extensions/js/");
+    public List<Resource> blJsLocations() {
+    	return Arrays.asList(
+    		appCtx.getResource("classpath:/common_js/"),
+    		appCtx.getResource("classpath:/extensions/js/"));
     }
     /*<bean id="blCssLocations" class="org.springframework.beans.factory.config.ListFactoryBean" >
         <property name="sourceList">
@@ -246,10 +254,10 @@ public class BlCommonAppCtx {
         </property>
     </bean>*/
     @Bean
-    public List<String> blCssLocations() {
+    public List<Resource> blCssLocations() {
     	return Arrays.asList();
     }
-    
+
     /*<bean id="blJsFileList" class="org.springframework.beans.factory.config.ListFactoryBean" >
         <property name="sourceList">
             <list>
